@@ -7,9 +7,9 @@ const Question = (props) => {
             <h5>{props.question}</h5>
         </div>
 
-        {/* <div className='d-flex gap-3'>
-            {props.answers.map(item => <button key={item} className='btn btn-secondary'> {item} </button>)}
-        </div> */}
+        <div className='d-flex gap-3' onClick={props.selected} >
+            {props.answers.map(item => <button key={item.value} className='btn btn-secondary' > {item.value} </button>)}
+        </div>
     </div>
   )
 }

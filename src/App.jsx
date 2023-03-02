@@ -11,39 +11,38 @@ const App = () => {
       const data = await fetch("https://opentdb.com/api.php?amount=5&category=18&difficulty=easy&type=multiple")
       const response = await data.json()
       const results = await response.results
-      const arr = await results.map(item => (
-          {
-            id: nanoid(), 
-            question: item.question, 
-            answers: [
-              {
-                value: item.correct_answer, 
-                isSelected: false,
-                isCorrect: true
-              },
-              {
-                value: item.incorrect_answers,
-                isSelected: false,
-                isCorrect: false
-              }
-            ]
-          }
-        )
-      )
-    setData([...arr])
+      const arr = await results.map(item => {
+        const answers = [...item.incorrect_answers, item.correct_answer].map(answer => ({
+          value: answer,
+          isSelected: false,
+          isCorrect: answer === item.correct_answer,
+        }))
+        return {
+          id: nanoid(), 
+          question: item.question, 
+          answers,
+        }
+      })
+      setData(arr)
     }
     getAPI()
 
   }, [])
 
-  // console.log(data[0]?.answers[0].value)
+  // console.log(data[0]?.answers[1].value)
+
+  const [select, setSelect] = React.useState()
+
+  const selectChoice = (id) => {
+    console.log(id)
+  }
 
   const elements = data.map(item => (
-    <div>
+    <div key={item.id}>
     <Question 
-      key={item.id}
       question={item.question} 
-      // answers={item.answers.value} 
+      answers={item.answers} 
+      selected={() => (selectChoice(item.answers))}
     />
     <hr/>
     </div>
